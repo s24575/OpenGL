@@ -15,6 +15,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void)
 {
     GLFWwindow* window;
@@ -28,7 +31,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -46,16 +49,19 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << '\n';
 
     float positions[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
+        0.0f, 0.0f, 0.0f, 0.0f,
+        960.0f, 0.0f, 1.0f, 0.0f,
+        960.0f, 540.0f, 1.0f, 1.0f,
+        0.0f, 540.0f, 0.0f, 1.0f
     };
 
     unsigned int indicies[] = {
         0, 1, 2,
         2, 3, 0
     };
+
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    GLCall(glEnable(GL_BLEND));
 
     VertexArray va;
     VertexBuffer vb(positions, 4 * 4 * sizeof(float));
@@ -66,7 +72,8 @@ int main(void)
     va.AddBuffer(vb, layout);
 
     IndexBuffer ib(indicies, 6);
-    ib.Bind();
+
+    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
 
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
@@ -75,6 +82,7 @@ int main(void)
     Texture texture("res/textures/opengl-logo.png");
     texture.Bind();
     shader.SetUniform1i("u_Texture", 0);
+    shader.SetUniformMat4f("u_MVP", proj);
 
     va.Unbind();
     shader.Unbind();
