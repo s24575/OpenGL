@@ -22,6 +22,9 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+#include "tests/Test.h"
+#include "tests/TestClearColor.h"
+
 int main(void)
 {
     GLFWwindow* window;
@@ -50,48 +53,12 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << '\n';
 
-    float positions[] = {
-        0.0f, 0.0f, 0.0f, 0.0f,
-        960.0f, 0.0f, 1.0f, 0.0f,
-        960.0f, 540.0f, 1.0f, 1.0f,
-        0.0f, 540.0f, 0.0f, 1.0f
-    };
-
-    unsigned int indicies[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     GLCall(glEnable(GL_BLEND));
-
-    VertexArray va;
-    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
-
-    VertexBufferLayout layout;
-    layout.Push<float>(2);
-    layout.Push<float>(2);
-    va.AddBuffer(vb, layout);
-
-    IndexBuffer ib(indicies, 6);
-
-    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-    Shader shader("res/shaders/Basic.shader");
-    shader.Bind();
-
-    Texture texture("res/textures/opengl-logo.png");
-    texture.Bind();
-    shader.SetUniform1i("u_Texture", 0);
-
-    va.Unbind();
-    shader.Unbind();
-    va.Unbind();
-    ib.Unbind();
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
     Renderer renderer;
 
+    /* ImGui init */
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -99,13 +66,16 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init((char*)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
 
-    glm::vec3 translation(0.0f, 0.0f, 0.0f);
+    test::Test* currentTest = nullptr;
+    test::TestMenu* testMenu = new test::TestMenu(currentTest);
+    currentTest = testMenu;
 
-    float r = 0.0f;
+    testMenu->RegisterTest<test::TestClearColor>("Clear Color");
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         renderer.Clear();
 
         /* ImGui new frame */
@@ -113,25 +83,20 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-        glm::mat4 mvp = proj * view * model;
-
-        shader.Bind();
-        shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
-        shader.SetUniformMat4f("u_MVP", mvp);
-
-        renderer.Draw(va, ib, shader);
-
-        /* ImGui window */
+        if (currentTest)
         {
-            ImGui::Begin("ImGui window");
-
-            ImGui::SliderFloat("Red channel", &r, 0.0f, 1.0f);
-            ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            currentTest->OnUpdate(0.0f);
+            currentTest->OnRender();
+            ImGui::Begin("Test");
+            if (currentTest != testMenu && ImGui::Button("Go back"))
+            {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+            currentTest->OnImGuiRender();
             ImGui::End();
         }
+
 
         /* ImGui render */
         ImGui::Render();
@@ -143,6 +108,10 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
+
+    delete currentTest;
+    if(currentTest != testMenu)
+        delete testMenu;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
