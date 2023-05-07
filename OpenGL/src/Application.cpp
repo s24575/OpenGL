@@ -25,6 +25,7 @@
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h"
 #include "tests/TestRotation.h"
+#include "tests/TestScenery.h"
 
 int main(void)
 {
@@ -74,6 +75,7 @@ int main(void)
     testMenu->RegisterTest<test::TestClearColor>("Clear Color");
     testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
     testMenu->RegisterTest<test::TestRotation>("Rotation");
+    testMenu->RegisterTest<test::TestScenery>("Scenery");
 
     double lastTime = glfwGetTime();
 

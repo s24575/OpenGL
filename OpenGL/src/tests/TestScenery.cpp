@@ -1,4 +1,4 @@
-#include "TestRotation.h"
+#include "TestScenery.h"
 
 #include "Renderer.h"
 #include "imgui/imgui.h"
@@ -6,15 +6,19 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "GLFW/glfw3.h"
+
 namespace test {
 
-	TestRotation::TestRotation()
-		: m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, 0.0f, -500.0f)),
+	TestScenery::TestScenery()
+		: m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 540.0f, 0.1f, 1000.0f)),
 		m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f))),
-		m_Translation(480.0f, 270.0f, 200.0f),
+		m_Translation(0.0f, 0.0f, 250.0f),
 		m_CurrentTime(0.0f),
-		m_ScaleFactor(200.0f)
+		m_ScaleFactor(100.0f)
 	{
+		m_View = glm::rotate(m_View, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		float positions[] = {
 			-0.5f, -0.5f,  0.5f,
 			 0.5f, -0.5f,  0.5f,
@@ -56,22 +60,22 @@ namespace test {
 
 		m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, 6 * 6);
 
-		m_Shader = std::make_unique<Shader>("res/shaders/Rotate.shader");
+		m_Shader = std::make_unique<Shader>("res/shaders/Scenery.shader");
 	}
 
-	TestRotation::~TestRotation()
+	TestScenery::~TestScenery()
 	{
 
 	}
 
-	void TestRotation::OnUpdate(float deltaTime)
+	void TestScenery::OnUpdate(float deltaTime)
 	{
 		m_CurrentTime += deltaTime;
 	}
 
-	void TestRotation::OnRender()
+	void TestScenery::OnRender()
 	{
-		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 0.0f));
+		GLCall(glClearColor(0.53f, 0.81f, 0.92f, 0.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 		Renderer renderer;
@@ -85,11 +89,12 @@ namespace test {
 		renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 	}
 
-	void TestRotation::OnImGuiRender()
+	void TestScenery::OnImGuiRender()
 	{
-		ImGui::SliderFloat("Distance", &m_Translation.z, 0.0f, 500.0f);
+		ImGui::SliderFloat("Distance", &m_Translation.z, 0.0f, 10000.0f);
 		ImGui::SliderFloat("Scale", &m_ScaleFactor, 0.0f, 540.0f);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Cube position: (%.3f, %.3f, %.3f)", m_Translation.x, m_Translation.y, m_Translation.z);
 	}
 
 }

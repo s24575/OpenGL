@@ -75,6 +75,9 @@
     <ClCompile Include="src\tests\TestRotation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestScenery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -487,6 +490,7 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="res\shaders\Rotate.shader" />
+    <None Include="res\shaders\Scenery.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1396,6 +1400,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestRotation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestScenery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

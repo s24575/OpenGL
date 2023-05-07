@@ -10,11 +10,11 @@
 
 namespace test {
 
-	class TestRotation : public Test
+	class TestScenery : public Test
 	{
 	public:
-		TestRotation();
-		~TestRotation();
+		TestScenery();
+		~TestScenery();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
