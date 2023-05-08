@@ -28,8 +28,18 @@ namespace test {
 		glm::mat4 m_Proj, m_View;
 		glm::vec3 m_Translation;
 
-		double m_CurrentTime;
 		float m_ScaleFactor;
+
+		std::unique_ptr<Shader> m_PlaneShader;
+		std::unique_ptr<VertexArray> m_PlaneVAO;
+		std::unique_ptr<VertexBuffer> m_PlaneVertexBuffer;
+		std::unique_ptr<IndexBuffer> m_PlaneIndexBuffer;
+
+		glm::vec3 m_PlaneTranslation;
+
+		float m_PlaneScaleFactor;
+
+		double m_CurrentTime;
 	};
 
 }
