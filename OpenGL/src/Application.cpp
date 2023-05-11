@@ -96,7 +96,7 @@ int main(void)
 
         if (currentTest)
         {
-            currentTest->OnUpdate(deltaTime);
+            currentTest->OnUpdate((float)deltaTime);
             currentTest->OnRender();
             ImGui::Begin("Test");
             if (currentTest != testMenu && ImGui::Button("Go back"))

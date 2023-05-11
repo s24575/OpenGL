@@ -1,5 +1,6 @@
 #include "TestScenery.h"
 
+#include "DebugUtil.h"
 #include "Renderer.h"
 #include "imgui/imgui.h"
 
@@ -93,7 +94,7 @@ namespace test {
 		planeLayout.Push<float>(3);
 		m_PlaneVAO->AddBuffer(*m_PlaneVertexBuffer, planeLayout);
 
-		m_PlaneIndexBuffer = std::make_unique<IndexBuffer>(planeVertices, 6);
+		m_PlaneIndexBuffer = std::make_unique<IndexBuffer>(planeIndicies, 6);
 
 		m_PlaneShader = std::make_unique<Shader>("res/shaders/Scenery.shader");
 	}
