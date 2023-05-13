@@ -17,3 +17,8 @@ void Renderer::Draw(const Cube& cube) const
 {
     GLCall(glDrawElements(GL_TRIANGLES, cube.getVerticesCount(), GL_UNSIGNED_INT, nullptr));
 }
+
+void Renderer::Draw(const Plane& plane) const
+{
+    GLCall(glDrawElements(GL_TRIANGLES, plane.getVerticesCount(), GL_UNSIGNED_INT, nullptr));
+}

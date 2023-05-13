@@ -27,9 +27,9 @@ namespace test {
 		glm::mat4 m_Proj, m_View;
 
 		Cube cube;
+		float m_ScaleFactor;
 
 		double m_CurrentTime;
-		float m_ScaleFactor;
 	};
 
 }
