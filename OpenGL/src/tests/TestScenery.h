@@ -28,12 +28,10 @@ namespace test {
 	private:
 		glm::mat4 m_Proj, m_View;
 
-		std::unique_ptr<Shader> m_CubeShader;
-		Cube cube;
+		Cube m_Cube;
 		float m_CubeScaleFactor;
 
-		std::unique_ptr<Shader> m_PlaneShader;
-		Plane plane;
+		//Plane m_Plane;
 		float m_PlaneScaleFactor;
 
 		double m_CurrentTime;

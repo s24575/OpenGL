@@ -38,5 +38,5 @@ uniform vec4 u_Color;
 
 void main()
 {
-    color = vec4(vec3(1.0f, 0.0f, 0.0f) * (1 - ((depth + 1) / 2)), 1.0);
+    color = vec4(vec3(1.0f, 0.0f, 0.0f) * ((-depth + 1) / 2), 1.0);
 };

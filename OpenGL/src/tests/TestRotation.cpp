@@ -14,7 +14,7 @@ namespace test {
 		m_CurrentTime(0.0f),
 		m_ScaleFactor(200.0f)
 	{
-		cube.setTranslation(480, 270, 200);
+		m_Cube.setTranslation(480, 270, 200);
 
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -41,17 +41,17 @@ namespace test {
 		Renderer renderer;
 
 		glm::mat4 scalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(m_ScaleFactor));
-		glm::mat4 model = glm::translate(glm::mat4(1.0f), cube.getTranslation()) * scalingMatrix;
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), m_Cube.getTranslation()) * scalingMatrix;
 		glm::mat4 mvp = m_Proj * m_View * model;
 		m_Shader->Bind();
 		m_Shader->SetUniformMat4f("u_MVP", mvp);
 		m_Shader->SetUniform1f("u_Delta", (float)m_CurrentTime);
-		renderer.Draw(cube);
+		renderer.Draw(m_Cube);
 	}
 
 	void TestRotation::OnImGuiRender()
 	{
-		ImGui::SliderFloat("Distance", &cube.getTranslation().z, 0.0f, 500.0f);
+		ImGui::SliderFloat("Distance", &m_Cube.getTranslation().z, 0.0f, 500.0f);
 		ImGui::SliderFloat("Scale", &m_ScaleFactor, 0.0f, 540.0f);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}

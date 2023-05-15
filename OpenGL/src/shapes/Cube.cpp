@@ -37,9 +37,19 @@ Cube::Cube()
 	m_VAO->AddBuffer(*m_VertexBuffer, layout);
 
 	m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, sizeof(indicies) / sizeof(unsigned int));
+
+	m_Shader = std::make_unique<Shader>("res/shaders/Rotate.shader");
 }
 
 Cube::~Cube()
 {
 
+}
+
+void Cube::draw()
+{
+	m_Shader->Bind();
+	m_VertexBuffer->Bind();
+	m_IndexBuffer->Bind();
+	GLCall(glDrawElements(GL_TRIANGLES, getVerticesCount(), GL_UNSIGNED_INT, nullptr));
 }
