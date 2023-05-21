@@ -3,8 +3,6 @@
 
 layout(location = 0) in vec4 position;
 
-out float depth;
-
 uniform mat4 u_MVP;
 uniform float u_Delta;
 
@@ -23,8 +21,6 @@ void main()
     float tmp_z = new_y * sin(u_Delta) + new_z * cos(u_Delta);
 
     gl_Position = u_MVP * vec4(tmp_x, tmp_y, tmp_z, 1.0);
-
-    depth = gl_Position.z / gl_Position.w;
 };
 
 #shader fragment
@@ -32,11 +28,7 @@ void main()
 
 layout(location = 0) out vec4 color;
 
-in float depth;
-
-uniform vec4 u_Color;
-
 void main()
 {
-    color = vec4(vec3(1.0f, 0.0f, 0.0f) * ((-depth + 1) / 2), 1.0);
+    color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 };

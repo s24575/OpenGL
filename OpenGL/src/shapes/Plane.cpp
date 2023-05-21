@@ -11,7 +11,7 @@ Plane::Plane()
 		-0.5f, 0.0f, -0.5f
 	};
 
-	unsigned int indicies[] = {
+	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0,
 	};
@@ -22,9 +22,11 @@ Plane::Plane()
 	layout.Push<float>(3);
 	m_VAO->AddBuffer(*m_VertexBuffer, layout);
 
-	m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, sizeof(indicies) / sizeof(unsigned int));
+	m_IndexBuffer = std::make_unique<IndexBuffer>(indices, sizeof(indices) / sizeof(unsigned int));
 
-	m_Shader = std::make_unique<Shader>("res/shaders/Scenery.shader");	
+	m_Shader = std::make_unique<Shader>("res/shaders/Scenery.shader");
+
+	//m_IndexBuffer->Bind();
 }
 
 Plane::~Plane()
@@ -35,7 +37,6 @@ Plane::~Plane()
 void Plane::draw()
 {
 	m_Shader->Bind();
-	m_VertexBuffer->Bind();
-	m_IndexBuffer->Bind();
+	m_VAO->Bind();
 	GLCall(glDrawElements(GL_TRIANGLES, getVerticesCount(), GL_UNSIGNED_INT, nullptr));
 }
