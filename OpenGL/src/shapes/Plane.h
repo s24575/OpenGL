@@ -16,8 +16,11 @@ public:
 	Plane();
 	~Plane();
 
+	void update(const glm::mat4& view, const glm::mat4& proj, float currentTime);
 	void draw();
 
+	float& getScaleFactor() { return m_ScaleFactor; }
+	void setScaleFactor(float scale) { m_ScaleFactor = scale; }
 	Shader* getShader() const { return m_Shader.get(); }
 	unsigned int getVerticesCount() const { return m_IndexBuffer->GetCount(); }
 	glm::vec3& getTranslation() { return m_Translation; }
@@ -35,4 +38,5 @@ private:
 	std::unique_ptr<IndexBuffer> m_IndexBuffer;
 
 	glm::vec3 m_Translation;
+	float m_ScaleFactor;
 };

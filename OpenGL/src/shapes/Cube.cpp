@@ -1,4 +1,5 @@
 #include "Cube.h"
+
 #include "glm/gtc/matrix_transform.hpp"
 
 Cube::Cube()
@@ -41,8 +42,6 @@ Cube::Cube()
 	m_IndexBuffer = std::make_unique<IndexBuffer>(indices, sizeof(indices) / sizeof(unsigned int));
 
 	m_Shader = std::make_unique<Shader>("res/shaders/Rotate.shader");
-
-	//m_IndexBuffer->Bind();
 }
 
 Cube::~Cube()
